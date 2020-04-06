@@ -3,4 +3,4 @@
 ## Web Scraping
 
 * 埼玉県：　https://www.pref.saitama.lg.jp/a0701/covid19/jokyo.html
-  * [Usage](web_scraping/11saitama.ipynb) : 2020/04/03 サイトで掲載されているデータがHTMLからpdfに変更になったため、このコードではデータは抽出できません
+  * [埼玉県発表](web_scraping/11-pref-saitama.ipynb)
