@@ -29,7 +29,12 @@ def get_links(urls):
         links.extend(src.find_all(lambda tag: tag.name == 'a' and re.search(filter, tag.get_text()) != None))
     return [[domain + tag['href'], tag.get_text()] for tag in links]
 
-header = ['No','年代','性別','国籍','職業','通勤','居住地','症状、経過','その他','url']
+def parse_url(url):
+    """ url から公表日を取得する """
+    s = re.split("[:/|-]", url)
+    return f'{s[7]}/{(s[8])[:2]}/{(s[8])[2:]}'
+
+header = ['No','日付','年代','性別','国籍','職業','通勤','居住地','症状、経過','その他','url']
 
 def parse(src, url):
 
@@ -45,7 +50,7 @@ def parse(src, url):
         return no if len(no) > 0 else '0'
 
     def parse_p(e):
-        return re.split('[：：)）]', get_text(e))
+        return re.split('[：:)）]', get_text(e))
 
     def parse_table(e):
         table = []
@@ -70,6 +75,8 @@ def parse(src, url):
     def dic2array(item):
         return [item[h] for h in header]
 
+    date = parse_url(url)
+
     patients = []
     item = defaultdict(lambda: '')
     for e in get_contents(src):
@@ -79,6 +86,7 @@ def parse(src, url):
                     break
                 if len(item) > 0:
                     item['url'] = url
+                    item['日付'] = date
                     patients.append(dic2array(item))
                     item = defaultdict(lambda: '')
                 item[header[0]] = parse_h(e)
@@ -96,6 +104,7 @@ def parse(src, url):
                 print(type(e), e.name)
     if len(item) > 0:
         item['url'] = url
+        item['日付'] = date
         patients.append(dic2array(item))
     return patients
 
